@@ -1,0 +1,748 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+        {
+            "type": 1,
+            "content": {
+                "json": "# AVD Monitoring"
+            },
+            "name": "text - 5"
+        },
+        {
+            "type": 11,
+            "content": {
+                "version": "LinkItem/1.0",
+                "style": "tabs",
+                "links": [
+                    {
+                        "id": "3eb1ee28-958f-46b1-8633-5142895b479a",
+                        "cellValue": "avdTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "User Sessions",
+                        "subTarget": "Sessions",
+                        "style": "link",
+                        "linkIsContextBlade": true
+                    },
+                    {
+                        "id": "4fbec66c-fe95-4789-9c5f-e3a9712107e0",
+                        "cellValue": "avdTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "Personal Desktop Usage",
+                        "subTarget": "PersonalDesktops",
+                        "style": "link"
+                    }
+                ]
+            },
+            "name": "links - 20"
+        },
+        {
+            "type": 12,
+            "content": {
+                "version": "NotebookGroup/1.0",
+                "groupType": "editable",
+                "items": [
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## AVD Current Connection Status (Last 5 minutes)"
+                        },
+                        "customWidth": "100",
+                        "name": "text - 7"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "ITPC_CTX_Session_CL\r\n| where TimeGenerated > ago(5m) \r\n| summarize dcount(UserName_s)\r\n| extend TotalSessionCount=dcount_UserName_s\r\n| extend Caption = \"Total Sessions\"\r\n| project Caption,TotalSessionCount",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "TotalSessionCount",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "palette": "auto"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.6",
+                        "name": "query - 0"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDConnections\r\n| where TimeGenerated > ago(5m) and State == \"Connected\"\r\n| summarize dcount(UserName)\r\n| extend NewSessions=dcount_UserName\r\n| extend Caption = \"New Sessions\"\r\n| project Caption,NewSessions",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {},
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "NewSessions",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "palette": "auto"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.5",
+                        "name": "query - 15"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "ITPC_CTX_Session_CL\r\n| where TimeGenerated > ago(5m) \r\n| where ConnectionState_s!=\"Disconnected\"\r\n| summarize dcount(SessionHash_s)\r\n| extend TotalSessionCount=dcount_SessionHash_s\r\n| extend Caption = \"Active Sessions\"\r\n| project Caption,TotalSessionCount",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "TotalSessionCount",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "palette": "auto"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.5",
+                        "name": "query - 8"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "ITPC_CTX_Session_CL\r\n| where TimeGenerated > ago(5m) \r\n| where ConnectionState_s==\"Disconnected\"\r\n| summarize dcount(SessionHash_s)\r\n| extend TotalSessionCount=dcount_SessionHash_s\r\n| extend Caption = \"Disconnected Sessions\"\r\n| project Caption,TotalSessionCount",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "TotalSessionCount",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "palette": "auto"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.5",
+                        "name": "query - 9"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDErrors \r\n| where TimeGenerated > ago(5m)\r\n| where (CodeSymbolic in~(\"ActivityTimeout\",\"ConnectionFailedClientDisconnect\",\"SavedCredentialsNotAllowed\",\"ConnectionBrokenMissedHeartbeatThresholdExceeded\",\"AuthenticationLogonFailed\",\"FreshCredsRequired\",\"CM_ERR_MISSED_HEARTBEAT_THRESHOLD_EXCEEDED\",\"NL_DISCONNECT_ERROR\",\"PasswordExpired\",\"AccountLockedOut\",\"AccountExpired\",\"InvalidCredentials\",\"AutoReconnectNoCookie\",\"LogonFailed\"))\r\n| summarize dcount(UserName)\r\n| extend TotalSessionCount=dcount_UserName\r\n| extend Caption = \"Client Connection Errors\"\r\n| project Caption,TotalSessionCount",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "TotalSessionCount",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "min": 0,
+                                        "max": 50,
+                                        "palette": "greenRed"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.5",
+                        "name": "query - 1"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDErrors \r\n| where TimeGenerated > ago(5m)\r\n| where not(CodeSymbolic in~(\"ActivityTimeout\",\"ConnectionFailedClientDisconnect\",\"SavedCredentialsNotAllowed\",\"ConnectionBrokenMissedHeartbeatThresholdExceeded\",\"AuthenticationLogonFailed\",\"FreshCredsRequired\",\"CM_ERR_MISSED_HEARTBEAT_THRESHOLD_EXCEEDED\",\"NL_DISCONNECT_ERROR\",\"PasswordExpired\",\"AccountLockedOut\",\"AccountExpired\",\"InvalidCredentials\",\"AutoReconnectNoCookie\",\"LogonFailed\")) or ServiceError == \"true\"\r\n| summarize dcount(UserName)\r\n| extend TotalSessionCount=dcount_UserName\r\n| extend Caption = \"Server/Service Connection Errors\"\r\n| project Caption,TotalSessionCount",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "TotalSessionCount",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "min": 0,
+                                        "max": 20,
+                                        "palette": "greenRed"
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "16.5",
+                        "name": "query - 6"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "let ConnectionDurationSpring=\r\nWVDConnections \r\n| where Type =~\"WVDConnections\" and State =~ \"Started\" | extend Multi=split(_ResourceId, \"/\") | project ResourceAlias, HostPool=toupper(HP=Multi[8]), SessionHostName , UserName ,CState=iff(SessionHostOSVersion==\"<>\",\"Failure\",\"Success\"), CorrelationId, TimeGenerated, ResourceGroup=Multi[4], DesktopGroup_s=toupper(strcat(RG=Multi[4],\".\", HP=Multi[8])) \r\n| join kind= leftouter (\r\n    WVDCheckpoints \r\n) on CorrelationId\r\n| extend DurationFromLogon=datetime_diff(\"Second\",TimeGenerated1,TimeGenerated)\r\n| where Name=~\"RdpStackLogon\" and CState == \"Success\" and TimeGenerated > ago(5m)\r\n| summarize AvgDuration=avg(DurationFromLogon);\r\nlet AvgConnectDuration=\r\ntoscalar(ConnectionDurationSpring\r\n| summarize avg(AvgDuration));\r\nConnectionDurationSpring\r\n| extend AvgConnectDuration\r\n| extend Caption = \"AVD Connection Time\"\r\n| project Caption,AvgConnectDuration",
+                            "size": 4,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "AvgConnectDuration",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "min": 0,
+                                        "max": 90,
+                                        "palette": "greenRed"
+                                    },
+                                    "numberFormat": {
+                                        "unit": 24,
+                                        "options": {
+                                            "style": "decimal",
+                                            "maximumFractionDigits": 1
+                                        }
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "20",
+                        "name": "query - 11"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "let LogonDuration=\r\nITPC_CTX_Events_CL\r\n| extend UserName_s=tolower(UserName_s)\r\n| where Trigger_s ==\"Logon\" and UserName_s !=\"\" //and TimeGenerated > ago(5m)\r\n| summarize TimeGenerated=max(TimeGenerated), SessionLogon=sum(Duration_d) by SessionHash_s\r\n| summarize AvgDuration=avg(SessionLogon);\r\nlet AvgLogonDuration=\r\ntoscalar(LogonDuration\r\n| summarize avg(AvgDuration));\r\nLogonDuration\r\n| extend AvgLogonDuration\r\n| extend Caption = \"AVD Desktop Load Time\"\r\n| project Caption,AvgLogonDuration",
+                            "size": 4,
+                            "timeContext": {
+                                "durationMs": 1800000
+                            },
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "tiles",
+                            "tileSettings": {
+                                "titleContent": {
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Caption",
+                                    "formatter": 1
+                                },
+                                "rightContent": {
+                                    "columnMatch": "AvgLogonDuration",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "min": 0,
+                                        "max": 30,
+                                        "palette": "greenRed"
+                                    },
+                                    "numberFormat": {
+                                        "unit": 24,
+                                        "options": {
+                                            "style": "decimal",
+                                            "maximumFractionDigits": 2
+                                        }
+                                    }
+                                },
+                                "showBorder": true,
+                                "size": "full"
+                            }
+                        },
+                        "customWidth": "20",
+                        "name": "query - 12"
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "let Latencies= datatable(Latency:int, Count:int)\r\n[0, 0, 25, 0, 50, 0, 75, 0, 100, 0, 125, 0, 150, 0, 175, 0, 200, 0, 225, 0, 250, 0, 275, 0, 300, 0];\r\nlet LatencyF = (l:int) {\r\n    iff(l>300, \">300 ms\", strcat(l, \" ms\"))\r\n    };\r\nlet Latency=\r\nITPC_CTX_PerfData_CL \r\n| where TimeGenerated > ago(5m) and (Category == \"ICA Session\" or Category == \"RemoteFX Network\") and (Counter_s == \"Latency - Last Recorded\" or Counter_s == \"Current TCP RTT\") and Instance_s != \"_Server Total\" \r\n| summarize AvgLatency = avg(value_d) by SessionHash_s\r\n| extend AvgLatencyBinned=bin(AvgLatency, 25)\r\n| summarize Count=toint(count()) by Latency=toint(AvgLatencyBinned);\r\nLatency\r\n| join kind=rightanti Latencies on Latency\r\n| union Latency\r\n| order by Latency asc\r\n| extend LatencyF= LatencyF(Latency)\r\n| project Latency, LatencyF, Sessions=Count",
+                            "size": 4,
+                            "title": "Session Network Latency (by Sessions)",
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "barchart",
+                            "tileSettings": {
+                                "showBorder": false,
+                                "titleContent": {
+                                    "columnMatch": "LatencyF",
+                                    "formatter": 1
+                                },
+                                "leftContent": {
+                                    "columnMatch": "Latency",
+                                    "formatter": 12,
+                                    "formatOptions": {
+                                        "palette": "auto"
+                                    },
+                                    "numberFormat": {
+                                        "unit": 17,
+                                        "options": {
+                                            "maximumSignificantDigits": 3,
+                                            "maximumFractionDigits": 2
+                                        }
+                                    }
+                                }
+                            },
+                            "graphSettings": {
+                                "type": 0,
+                                "topContent": {
+                                    "columnMatch": "LatencyF",
+                                    "formatter": 1
+                                },
+                                "centerContent": {
+                                    "columnMatch": "Latency",
+                                    "formatter": 1,
+                                    "numberFormat": {
+                                        "unit": 17,
+                                        "options": {
+                                            "maximumSignificantDigits": 3,
+                                            "maximumFractionDigits": 2
+                                        }
+                                    }
+                                }
+                            },
+                            "chartSettings": {
+                                "xAxis": "LatencyF",
+                                "yAxis": [
+                                    "Sessions",
+                                    "LatencyF"
+                                ]
+                            },
+                            "mapSettings": {
+                                "locInfo": "LatLong",
+                                "sizeSettings": "Latency",
+                                "sizeAggregation": "Sum",
+                                "legendMetric": "Latency",
+                                "legendAggregation": "Sum",
+                                "itemColorSettings": {
+                                    "type": "heatmap",
+                                    "colorAggregation": "Sum",
+                                    "nodeColorField": "Latency",
+                                    "heatmapPalette": "greenRed"
+                                }
+                            }
+                        },
+                        "customWidth": "60",
+                        "name": "query - 13",
+                        "styleSettings": {
+                            "margin": "-10px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 9,
+                        "content": {
+                            "version": "KqlParameterItem/1.0",
+                            "parameters": [
+                                {
+                                    "id": "4bdd1d80-da66-4ed6-8d38-e0fbc3be9b7d",
+                                    "version": "KqlParameterItem/1.0",
+                                    "name": "TimeRange",
+                                    "label": "Time range",
+                                    "type": 4,
+                                    "isRequired": true,
+                                    "isGlobal": true,
+                                    "value": {
+                                        "durationMs": 1800000
+                                    },
+                                    "typeSettings": {
+                                        "selectableValues": [
+                                            {
+                                                "durationMs": 300000
+                                            },
+                                            {
+                                                "durationMs": 900000
+                                            },
+                                            {
+                                                "durationMs": 1800000
+                                            },
+                                            {
+                                                "durationMs": 3600000
+                                            },
+                                            {
+                                                "durationMs": 14400000
+                                            },
+                                            {
+                                                "durationMs": 43200000
+                                            },
+                                            {
+                                                "durationMs": 86400000
+                                            },
+                                            {
+                                                "durationMs": 172800000
+                                            },
+                                            {
+                                                "durationMs": 259200000
+                                            },
+                                            {
+                                                "durationMs": 604800000
+                                            },
+                                            {
+                                                "durationMs": 1209600000
+                                            },
+                                            {
+                                                "durationMs": 2419200000
+                                            },
+                                            {
+                                                "durationMs": 2592000000
+                                            },
+                                            {
+                                                "durationMs": 5184000000
+                                            },
+                                            {
+                                                "durationMs": 7776000000
+                                            }
+                                        ],
+                                        "allowCustom": true
+                                    }
+                                },
+                                {
+                                    "id": "3cd98270-63e3-4fc1-8686-4652cbcf5370",
+                                    "version": "KqlParameterItem/1.0",
+                                    "name": "TimeZone",
+                                    "type": 2,
+                                    "isRequired": true,
+                                    "isGlobal": true,
+                                    "typeSettings": {
+                                        "additionalResourceOptions": [],
+                                        "showDefault": false
+                                    },
+                                    "jsonData": "[\r\n{\r\n    \"value\":  14,\r\n    \"text\":  \"Kiribati (UTC+14)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  13,\r\n    \"text\":  \"Samoa, Tokelau, Tonga (UTC+13)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  12,\r\n    \"text\":  \"Fiji, Marshall Islands, New Zealand (UTC+12)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  11,\r\n    \"text\":  \"Australia, Norfolk Island, Vanuatu (UTC+11)\",\r\n    \"selected\":false,\r\n    \"default\":true\r\n},\r\n{\r\n    \"value\":  10,\r\n    \"text\":  \"Sydney, Papua New Guinea (UTC+10)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  9,\r\n    \"text\":  \"Ambon City, Japan, South Korea (UTC-7)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  8,\r\n    \"text\":  \"Western Australia, Beijing, Hong Kong, Singapore (UTC+8)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  7,\r\n    \"text\":  \"Cambodia, Indonesia, Vietname (UTC+7)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  6,\r\n    \"text\":  \"Bangladesh, Bhutan, Kazakhstan (UTC+6)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  5.5,\r\n    \"text\":  \"India (UTC+5:30)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  5,\r\n    \"text\":  \"Maldives, Pakistan, Uzbekistan (UTC+5)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  4,\r\n    \"text\":  \"Azerbaijan, Georgia, UAE (UTC+4)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  3,\r\n    \"text\":  \"Finland, Greece, Israel (UTC+3)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  2,\r\n    \"text\":  \"Italy, Denmark, Russia (UTC+2)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  1,\r\n    \"text\":  \"Chad, Congo, Nigeria (UTC+1)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  \"0\",\r\n    \"text\":  \"Greenland, Liberia, Ghana (UTC+0)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -1,\r\n    \"text\":  \"Cape Verde (UTC-1)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -2,\r\n    \"text\":  \"Brazil, Greenland (UTC-2)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -3,\r\n    \"text\":  \"Argentina, Brazil (UTC-3)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -4,\r\n    \"text\":  \"Eastern Time (UTC-4)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -5,\r\n    \"text\":  \"Central Time (UTC-5)\",\r\n    \"selected\":true\r\n},\r\n{\r\n    \"value\":  -6,\r\n    \"text\":  \"Mountain Time (UTC-6)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -7,\r\n    \"text\":  \"Pacific Time (UTC-7)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -8,\r\n    \"text\":  \"Alaska (UTC-8)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -9,\r\n    \"text\":  \"French Polynesia (UTC-9)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -10,\r\n    \"text\":  \"U.S. Minor Outlying Islands (UTC-7)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -11,\r\n    \"text\":  \"American Samoa (UTC-11)\",\r\n    \"selected\":false\r\n},\r\n{\r\n    \"value\":  -12,\r\n    \"text\":  \"U.S. Minor Outlying Islands (UTC-12)\",\r\n    \"selected\":false\r\n}\r\n]",
+                                    "value": "11"
+                                }
+                            ],
+                            "style": "above",
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces"
+                        },
+                        "name": "parameters"
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## AVD Connection Errors ({TimeRange})"
+                        },
+                        "name": "text - 10",
+                        "styleSettings": {
+                            "padding": "20px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDErrors \n| where TimeGenerated {TimeRange}\n//| where ServiceError == \"false\" \n| where ActivityType == \"Connection\"  \n| summarize UserCount = dcount(UserName) by CodeSymbolic, bin(TimeGenerated, 5m)\n| render timechart\n\n",
+                            "size": 1,
+                            "timeContext": {
+                                "durationMs": 1800000
+                            },
+                            "timeContextFromParameter": "TimeRange",
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces"
+                        },
+                        "customWidth": "100",
+                        "name": "query - 1"
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## AVD Errors by Occurrence"
+                        },
+                        "name": "text - 19",
+                        "styleSettings": {
+                            "margin": "40px 0px -40px 0px"
+                        }
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDErrors \r\n| where TimeGenerated {TimeRange}\r\n| where ServiceError == \"false\" \r\n| where ActivityType == \"Connection\"  \r\n| summarize UserCount = dcount(UserName) by CodeSymbolic,Message\r\n| sort by UserCount desc\r\n",
+                            "size": 0,
+                            "exportFieldName": "CodeSymbolic",
+                            "exportParameterName": "CodeSymbolic",
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "table",
+                            "gridSettings": {
+                                "formatters": [
+                                    {
+                                        "columnMatch": "CodeSymbolic",
+                                        "formatter": 1,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "20%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "Message",
+                                        "formatter": 1,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "60%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "UserCount",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "10%"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "customWidth": "100",
+                        "conditionalVisibility": {
+                            "parameterName": "CodeSymbolic",
+                            "comparison": "isNotEqualTo",
+                            "value": "\"\""
+                        },
+                        "name": "query - 7"
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## Users with \"{CodeSymbolic}\" error"
+                        },
+                        "name": "text - 18",
+                        "styleSettings": {
+                            "margin": "20px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "let WVDErrorFocus = WVDConnections\r\n| where TimeGenerated {TimeRange};\r\nWVDErrors\r\n| where TimeGenerated {TimeRange}\r\n| where CodeSymbolic == \"{CodeSymbolic}\"\r\n| join WVDErrorFocus on CorrelationId\r\n| sort by TimeGenerated\r\n| summarize by UserName,TimeGenerated,SessionHostName,Message,CorrelationId\r\n",
+                            "size": 1,
+                            "exportedParameters": [
+                                {
+                                    "fieldName": "UserName",
+                                    "parameterName": "UserName",
+                                    "parameterType": 1
+                                },
+                                {
+                                    "fieldName": "CorrelationId",
+                                    "parameterName": "CorrelationId",
+                                    "parameterType": 1
+                                }
+                            ],
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "gridSettings": {
+                                "formatters": [
+                                    {
+                                        "columnMatch": "UserName",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "15%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "TimeGenerated",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "10%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "SessionHostName",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "15%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "Message",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "45%"
+                                        }
+                                    },
+                                    {
+                                        "columnMatch": "CorrelationId",
+                                        "formatter": 0,
+                                        "formatOptions": {
+                                            "customColumnWidthSetting": "15%"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "conditionalVisibility": {
+                            "parameterName": "CodeSymbolic",
+                            "comparison": "isNotEqualTo"
+                        },
+                        "name": "query - 14",
+                        "styleSettings": {
+                            "margin": "-40px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## Connection Information for \"{UserName}\""
+                        },
+                        "name": "text - 17",
+                        "styleSettings": {
+                            "margin": "20px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "let Connections = WVDConnections | where CorrelationId == \"{CorrelationId}\";\r\nlet Errors = WVDErrors | where CorrelationId == \"{CorrelationId}\";\r\nlet CheckPoints = WVDCheckpoints | where CorrelationId == \"{CorrelationId}\";\r\nunion Connections,Errors,CheckPoints\r\n| project TimeGenerated,Type,State,ConnectionType,ClientIPAddress,ActivityType,Source,Name,Parameters\r\n| sort by TimeGenerated asc",
+                            "size": 0,
+                            "title": "CorrelationId: {CorrelationId}",
+                            "timeContext": {
+                                "durationMs": 86400000
+                            },
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces"
+                        },
+                        "conditionalVisibility": {
+                            "parameterName": "UserName",
+                            "comparison": "isNotEqualTo"
+                        },
+                        "name": "query - 16",
+                        "styleSettings": {
+                            "margin": "-20px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 1,
+                        "content": {
+                            "json": "## Connection Errors - 7 day trend (by 1hr sample period)"
+                        },
+                        "customWidth": "100",
+                        "name": "text - 19",
+                        "styleSettings": {
+                            "margin": "20px 0px 0px 0px"
+                        }
+                    },
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDErrors \r\n| where TimeGenerated > ago(7d)\r\n| where ActivityType == \"Connection\"  \r\n| summarize UserCount = dcount(UserName) by bin(TimeGenerated, 1h)\r\n",
+                            "size": 0,
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "timechart",
+                            "chartSettings": {
+                                "showMetrics": false
+                            }
+                        },
+                        "customWidth": "100",
+                        "name": "query - 20"
+                    }
+                ]
+            },
+            "conditionalVisibility": {
+                "parameterName": "avdTab",
+                "comparison": "isEqualTo",
+                "value": "Sessions"
+            },
+            "name": "UserSessionInfo"
+        },
+        {
+            "type": 12,
+            "content": {
+                "version": "NotebookGroup/1.0",
+                "groupType": "editable",
+                "items": [
+                    {
+                        "type": 3,
+                        "content": {
+                            "version": "KqlItem/1.0",
+                            "query": "WVDConnections\r\n| where TimeGenerated > ago(28d)\r\n| extend hostpool=tostring(split(_ResourceId,\"/\")[8])\r\n| where hostpool == \"personal desktop standard\"\r\n| summarize hosts=dcount(SessionHostName) by bin(TimeGenerated,1d), hostpool",
+                            "size": 0,
+                            "title": "Personal Desktop Standard Hostpool (Usage last month)",
+                            "queryType": 0,
+                            "resourceType": "microsoft.operationalinsights/workspaces",
+                            "visualization": "barchart",
+                            "chartSettings": {
+                                "showMetrics": false
+                            }
+                        },
+                        "name": "query - 4"
+                    }
+                ]
+            },
+            "conditionalVisibility": {
+                "parameterName": "avdTab",
+                "comparison": "isEqualTo",
+                "value": "PersonalDesktops"
+            },
+            "name": "PersonalDesktops"
+        }
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
